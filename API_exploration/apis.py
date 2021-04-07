@@ -8,6 +8,8 @@ from flask import (current_app as app,
                    )
 from flask_wtf.csrf import CSRFError
 
+from API_exploration.API.xkcd import get_comic_data
+
 bp = Blueprint("apis", __name__)
 
 
@@ -35,6 +37,33 @@ def home():
     return render_template('home.html')
 
 
+@bp.route('/xkcd/', methods=['GET', 'POST'])
+def xkcd():
+    """
+    xkcd
+
+    By default return latest xkcd comic.
+
+    TODO Return chosen comic number via form.
+    ? allow search by date? have to build up db of dates
+    ? this would not be too hard as json for comics has the dates as mm dd yyyy
+    ? keeping db updated would be a chron job?
+
+    """
+    requested_comic = None  # Default, will return latest.
+    if request.method == 'POST':
+        requested_comic = request.form['requested_comic']
+
+    comic_data = get_comic_data(requested_comic)
+
+    return render_template('APIs/xkcd.html',
+                           comic_number=comic_data['comic_number'],
+                           comic_url=comic_data['comic_url'],
+                           comic_image_url=comic_data['comic_image_url'],
+                           comic_title=comic_data['comic_title'],
+                           comic_alt_text=comic_data['comic_alt_text'],
+                           latest_comic_number=comic_data['latest_comic_number'],
+                           )
 
 
 @bp.errorhandler(CSRFError)
