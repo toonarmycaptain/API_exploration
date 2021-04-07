@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+
+{% block header %}
+    {% block title %}xkcd{% endblock %}
+
+    <link rel="preload"
+          href="{{ comic_image_url }}"
+          as="image">
+
+{% endblock %}
+
+
+{% block body %}
+    <h3>{{ comic_title }}</h3>
+    <a href="{{ comic_url }}">
+        <img src={{ comic_image_url }}
+             title="{{ comic_alt_text }}"
+             alt="{{ comic_title }}">
+    </a>
+    <p>Comic by Randall Munroe at <a href="{{ comic_url }}">xkcd.com</a></p>
+    <!-- TODO: implement a form and allow changing the page. -->
+    <!-- Use a type-in, only allow numbers, and reject 404 on client and backend. -->
+    <!-- Have  first/previous/next/latest buttons? At what point are we recreating xkcd.com? -->
+    <p>latest comic: {{ latest_comic_number }}</p>
+{% endblock %}
