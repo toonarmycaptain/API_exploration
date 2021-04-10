@@ -8,7 +8,8 @@ from flask import (current_app as app,
                    )
 from flask_wtf.csrf import CSRFError
 
-from API_exploration.API.xkcd import get_comic_data
+from API_exploration.API import (xkcd,
+                                 )
 
 bp = Blueprint("apis", __name__)
 
@@ -38,7 +39,7 @@ def home():
 
 
 @bp.route('/xkcd/', methods=['GET', 'POST'])
-def xkcd():
+def xkcd_comic():  # Function named to avoid name clash with API import.
     """
     xkcd
 

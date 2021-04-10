@@ -26,7 +26,7 @@ def get_comic_data(comic_number: Union[int, str] = None) -> dict:
         comic_number = ''
 
     with requests.Session() as session:
-        comic_json = requests.get(f'https://xkcd.com/{comic_number}/info.0.json').json()
+        comic_json = session.get(f'https://xkcd.com/{comic_number}/info.0.json').json()
         comic_data = {'comic_number': comic_json['num'],
                       'comic_url': f'https://xkcd.com/{comic_number}',
                       'comic_image_url': comic_json['img'],
@@ -34,12 +34,8 @@ def get_comic_data(comic_number: Union[int, str] = None) -> dict:
                       'comic_alt_text': comic_json['alt'],
                       'latest_comic_number': comic_json['num']
                       }
-        print(f'{comic_number=}')
-        print(f"{comic_json['num']=}")
-        print(f"{comic_data['latest_comic_number']=}")
         if comic_number:  # ie if comic is not default/latest comic
-            latest_comic_json = requests.get(f'https://xkcd.com/info.0.json').json()
+            latest_comic_json = session.get(f'https://xkcd.com/info.0.json').json()
             comic_data['latest_comic_number'] = latest_comic_json['num']
-            print(f"after conditional: {comic_data['latest_comic_number']=}")
 
     return comic_data
