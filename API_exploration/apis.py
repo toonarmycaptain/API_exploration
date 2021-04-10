@@ -54,7 +54,7 @@ def xkcd():
     if request.method == 'POST':
         requested_comic = request.form['requested_comic']
 
-    comic_data = get_comic_data(requested_comic)
+    comic_data = xkcd.get_comic_data(requested_comic)
 
     return render_template('APIs/xkcd.html',
                            comic_number=comic_data['comic_number'],
