@@ -1,3 +1,4 @@
+"""xkcd API"""
 from typing import Union
 from functools import lru_cache
 
