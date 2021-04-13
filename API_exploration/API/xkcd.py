@@ -5,7 +5,6 @@ from functools import lru_cache
 import requests
 
 
-@lru_cache()
 def get_comic_data(comic_number: Union[int, str] = None) -> dict:
     """
     Calls xkcd API, returns necessary data as a dict.
