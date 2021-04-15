@@ -1,4 +1,6 @@
 """apis.py"""
+from datetime import date
+
 from flask import (current_app as app,
                    Blueprint,
                    redirect,
@@ -45,17 +47,21 @@ def xkcd_comic():  # Function named to avoid name clash with API import.
 
     By default return latest xkcd comic.
 
-    TODO Return chosen comic number via form.
+    TODO Return desired comic number/date via form.
     ? allow search by date? have to build up db of dates
     ? this would not be too hard as json for comics has the dates as mm dd yyyy
     ? keeping db updated would be a chron job?
 
     """
-    requested_comic = None  # Default, will return latest.
-    if request.method == 'POST':
-        requested_comic = request.form['requested_comic']
+    requested_comic_number = None  # Default, will return latest.
+    requested_comic_date = date.today()
 
-    comic_data = xkcd.get_comic_data(requested_comic)
+    if request.method == 'POST':
+        requested_comic_number = request.form['requested_comic_number']
+        requested_comic_date = request.form['requested_comic_date']
+
+    comic_data = xkcd.get_comic_data(comic_number=requested_comic_number,
+                                     day=requested_comic_date)
 
     return render_template('APIs/xkcd.html',
                            comic_number=comic_data['comic_number'],
