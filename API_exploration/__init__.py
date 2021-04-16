@@ -1,4 +1,5 @@
 """ App factory """
+import os
 
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect
@@ -28,12 +29,20 @@ def create_app(test_config: dict = None) -> Flask:
     # Defaults to be overridden by instance config:
 
     app.config.from_pyfile('default_config.py')
+    SECRET_KEY = os.urandom(512)
+    app.config.update(SECRET_KEY=SECRET_KEY)
 
     # Load runtime config:
     if test_config is None:  # Load production config.
         app.config.from_pyfile('app_config.py')
     else:  # Load testing config:
         app.config.update(test_config)
+
+
+
+    # Setup CSRF
+    CSRF_SECRET_KEY = os.urandom(512)
+    app.config.update(WTF_CSRF_SECRET_KEY=CSRF_SECRET_KEY)
 
     csrf = CSRFProtect(app)
 
