@@ -4,6 +4,7 @@
 {% block header %}
     {% block title %}xkcd{% endblock %}
 
+    <!--suppress InconsistentLineSeparators -->
     <link rel="preload"
           href="{{ comic_image_url }}"
           as="image">
@@ -16,11 +17,25 @@
     <a href="{{ comic_url }}">
         <img src={{ comic_image_url }}
              title="{{ comic_alt_text }}"
-             alt="{{ comic_title }}">
+             alt="{{ comic_title }}">  {# Make hidden click-down alt text#}
     </a>
     <p>Comic by Randall Munroe at <a href="{{ comic_url }}">xkcd.com</a></p>
-    <!-- TODO: implement a form and allow changing the page. -->
-    <!-- Use a type-in, only allow numbers, and reject 404 on client and backend. -->
-    <!-- Have  first/previous/next/latest buttons? At what point are we recreating xkcd.com? -->
-    <p>latest comic: {{ latest_comic_number }}</p>
+    <div class="xkcd_form">
+            <form method="post">
+                {{ form.hidden_tag() }}
+                {% if comic_number != 1 %}
+                    {{ form.first }}
+                    {{ form.previous }}
+                    {#  Add some spacing in here to make select button purpose clear  #}
+                {% endif %}
+                {{ form.select_comic_number }}
+                {{ form.comic_number_selected }}
+                {% if comic_number != latest_comic_number %}
+                    {#  Add some spacing in here to make select button purpose clear  #}
+                    {{ form.next }}
+                    {{ form.latest }}
+                {% endif %}
+        </form>
+    </div>
+
 {% endblock %}
