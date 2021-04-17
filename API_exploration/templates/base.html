@@ -29,7 +29,7 @@
     <ul>
         {# List in reverse order due to floating to right. #}
         {% for nav_url, nav_name in [('apis.home', 'Home'),
-                                     ('apis.xkcd_comic', 'xkcd'),
+                                     ('apis.xkcd', 'xkcd'),
                                      ] %}
             <li class="navbar_item">
                 <a class="navbar_link {% if nav_url in request.path %} nav_active_page {% endif %}"

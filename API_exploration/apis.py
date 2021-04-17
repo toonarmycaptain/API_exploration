@@ -10,7 +10,7 @@ from flask import (current_app as app,
                    )
 from flask_wtf.csrf import CSRFError
 
-from API_exploration.API import (xkcd,
+from API_exploration.API import (xkcd as xkcd_api,  # Alias to avoid name clash with route.
                                  )
 
 bp = Blueprint("apis", __name__)
@@ -41,7 +41,7 @@ def home():
 
 
 @bp.route('/xkcd/', methods=['GET', 'POST'])
-def xkcd_comic():  # Function named to avoid name clash with API import.
+def xkcd():
     """
     xkcd
 
@@ -63,7 +63,7 @@ def xkcd_comic():  # Function named to avoid name clash with API import.
     requested_comic_number = None  # Default, will return latest.
     requested_comic_date = date.today()
 
-    form = xkcd.xkcdForm()
+    form = xkcd_api.xkcdForm()
 
     if request.method == 'POST':
         form.select_comic_number.choices = [  # Prep valid choices to validate dropdown options.
@@ -80,13 +80,14 @@ def xkcd_comic():  # Function named to avoid name clash with API import.
             elif form.select_comic_number:
                 requested_comic_number = form.select_comic_number.data
 
-    comic_data = xkcd.get_comic_data(comic_number=requested_comic_number,
-                                     day=requested_comic_date)
+    comic_data = xkcd_api.get_comic_data(comic_number=requested_comic_number,
+                                         day=requested_comic_date)
     # Prepare form:
     comic_choices = [num for num in range(1, comic_data['latest_comic_number'] + 1)]
     comic_choices.remove(404)  # Remove nonexistent comic
     form.select_comic_number.choices = comic_choices
     form.select_comic_number.choices.remove(comic_data['comic_number'])  # Remove current comic
+
     form.current_comic.data = comic_data['comic_number']  # Set current comic
     form.latest_comic_number.data = comic_data['latest_comic_number']  # Set latest comic
 
@@ -106,6 +107,7 @@ def handle_csrf_error(e):
     Redirects user to requested page in event of CSRF Error.
 
     Assumes all routes are under my_site blueprint.
+    Assumes all route functions have same name as their url.
     """
     return redirect(url_for(f'apis.{request.path[1:-1]}'))
 
