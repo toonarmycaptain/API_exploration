@@ -25,12 +25,9 @@
                 {% if comic_number != 1 %}
                     {{ form.first }}
                     {{ form.previous }}
-                    {#  Add some spacing in here to make select button purpose clear  #}
                 {% endif %}
-                {{ form.select_comic_number }}
-                {{ form.comic_number_selected }}
+                {{ form.select_comic_number(**{"onchange":"this.form.submit()"}) }}
                 {% if comic_number != latest_comic_number %}
-                    {#  Add some spacing in here to make select button purpose clear  #}
                     {{ form.next }}
                     {{ form.latest }}
                 {% endif %}

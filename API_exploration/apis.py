@@ -50,6 +50,9 @@ def xkcd_comic():  # Function named to avoid name clash with API import.
     select_comic_number dropdown options have to be prepared and attached to
     form before validation, or validation for that field will fail, even if it
     was not submitted.
+    select_comic_number must be evaluated last, as it submits a value (initial
+    value 1) when the form is submitted, so it needs to be evaluated only
+    if none of the other buttons was pressed.
 
     TODO Return desired comic number/date via form.
     ? allow search by date? have to build up db of dates
@@ -70,13 +73,13 @@ def xkcd_comic():  # Function named to avoid name clash with API import.
                 requested_comic_number = 1
             elif form.previous.data:
                 requested_comic_number = int(form.current_comic.data) - 1
-            elif form.comic_number_selected.data:
-                requested_comic_number = form.select_comic_number.data
             elif form.next.data:
                 requested_comic_number = int(form.current_comic.data) + 1
             elif form.latest.data:
                 requested_comic_number = None
-    print(form.errors.items())
+            elif form.select_comic_number:
+                requested_comic_number = form.select_comic_number.data
+
     comic_data = xkcd.get_comic_data(comic_number=requested_comic_number,
                                      day=requested_comic_date)
     # Prepare form:
