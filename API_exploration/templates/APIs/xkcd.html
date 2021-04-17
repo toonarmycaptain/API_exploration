@@ -19,7 +19,6 @@
              title="{{ comic_alt_text }}"
              alt="{{ comic_title }}">  {# Make hidden click-down alt text#}
     </a>
-    <p>Comic by Randall Munroe at <a href="{{ comic_url }}">xkcd.com</a></p>
     <div class="xkcd_form">
             <form method="post">
                 {{ form.hidden_tag() }}
@@ -37,5 +36,6 @@
                 {% endif %}
         </form>
     </div>
+    <p>Comic by Randall Munroe at <a href="{{ comic_url }}">xkcd.com</a></p>
 
 {% endblock %}
