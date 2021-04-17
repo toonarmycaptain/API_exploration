@@ -49,5 +49,6 @@ def test_subpage_internal_routes(test_client,
     """Subpages load content."""
     response = test_client.get(f'{route}/')
     assert response.status_code == 200
-    # Equivalent to assert f'{page_title} - toonarmycaptain.com' in str(response.data)
-    assert page_title + b' - toonarmycaptain API exploration' in response.data
+    # Equivalent to assert 'some string' in str(response.data)
+    assert b' - toonarmycaptain API exploration' in response.data
+    assert page_title in response.data
