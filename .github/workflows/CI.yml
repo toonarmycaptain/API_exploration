@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        python-version: [3.8, 3.9]
+        python-version: [3.9]
         experimental: [false]  # These versions must pass.
 
 #         include:
@@ -48,13 +48,13 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install -r requirements.txt
         python -m pip install -r requirements_dev.txt
-        
+
     - name: Test with pytest --cov=./ --mypy -vv
       run: |
         pytest --cov=./ --mypy -vv
         coverage xml -i
         coveralls
-        
+
     - name: Codacy Coverage Reporter
       uses: codacy/codacy-coverage-reporter-action@0.2.0
       if: matrix.os == 'ubuntu_latest'
