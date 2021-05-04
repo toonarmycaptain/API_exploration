@@ -1,5 +1,5 @@
 """apis.py"""
-from datetime import date
+from datetime import datetime
 
 from flask import (current_app as app,
                    Blueprint,
@@ -61,7 +61,7 @@ def xkcd():
 
     """
     requested_comic_number = None  # Default, will return latest.
-    requested_comic_date = date.today()
+    current_date = datetime.now()
 
     form = xkcd_api.xkcdForm()
 
@@ -81,7 +81,7 @@ def xkcd():
                 requested_comic_number = form.select_comic_number.data
 
     comic_data = xkcd_api.get_comic_data(comic_number=requested_comic_number,
-                                         day=requested_comic_date)
+                                         cache_hour=(current_date.date, current_date.hour))
     # Prepare form:
     comic_choices = [num for num in range(1, comic_data['latest_comic_number'] + 1)]
     comic_choices.remove(404)  # Remove nonexistent comic

@@ -1,5 +1,5 @@
 """xkcd API"""
-from datetime import date
+from datetime import date, datetime
 from typing import Union
 from functools import lru_cache
 
@@ -7,14 +7,16 @@ import requests
 
 
 @lru_cache(maxsize=128)
-def get_comic_data(comic_number: Union[int, str] = None, day: date = date.today()) -> dict:
+def get_comic_data(comic_number: Union[int, str] = None,
+                   day: date = date.today(),
+                   cache_hour: tuple[date, int] = (date.today(), datetime.now().hour)) -> dict:
     """
     Calls xkcd API, returns necessary data as a dict.
 
     Also seeks latest_comic number for UI reference.
 
-    day default arg is the current date, to invalidate the cache each day
-    around midnight, preventing a previous latest comic from continuing to be
+    cache_hour default arg a tuple of the current date/hour, to invalidate the
+    cache each hour, preventing a previous latest comic from continuing to be
     cached as latest.
 
     NB Latest comic API call https://xkcd.com//info.0.json' works.
@@ -23,6 +25,7 @@ def get_comic_data(comic_number: Union[int, str] = None, day: date = date.today(
 
     :param comic_number: int
     :param day: datetime.date object
+    :param cache_hour: tuple (datetime.date, int)
     :return: dict
     """
     if comic_number is None:
