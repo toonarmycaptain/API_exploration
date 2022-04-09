@@ -6,21 +6,21 @@ def test_favicon(test_client):
     """Should return favicon."""
     response = test_client.get('/favicon.ico')
     assert response.status_code == 302
-    assert response.headers['Location'] == 'http://localhost/static/favicon.ico?mimetype=image%2Fvnd.microsoft.icon'
+    assert response.headers['Location'] in 'http://localhost/static/favicon.ico?mimetype=image%2Fvnd.microsoft.icon'
 
 
 def test_base_url_redirects_to_home(test_client):
     """Base url should go to home page."""
     response = test_client.get('/')
     assert response.status_code == 301
-    assert response.headers['Location'] == 'http://localhost/home/'
+    assert response.headers['Location'] in 'http://localhost/home/'
 
 
 def test_bare_base_url_redirects_to_home(test_client):
     """Base url without / should redirect to home page."""
     response = test_client.get('')
     assert response.status_code == 308
-    assert response.headers['Location'] == 'http://localhost/'
+    assert response.headers['Location'] in 'http://localhost/'
 
     # Ensure home page loaded.
     response = test_client.get('', follow_redirects=True)
