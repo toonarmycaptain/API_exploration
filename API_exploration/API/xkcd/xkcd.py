@@ -7,7 +7,7 @@ import requests
 
 
 @lru_cache(maxsize=128)
-def get_comic_data(comic_number: Union[int, str] = None,
+def get_comic_data(comic_number: Union[int, str]|None = None,
                    day: date = date.today(),
                    cache_hour: tuple[date, int] = (date.today(), datetime.now().hour)) -> dict:
     """
