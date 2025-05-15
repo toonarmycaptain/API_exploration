@@ -5,4 +5,4 @@ pytest==8.3.5
 pytest-flask==1.3.0
 pytest-cov==6.1.1
 pytest-mypy==1.0.1
-types-requests==2.32.0.20250328
+types-requests==2.32.0.20250515
