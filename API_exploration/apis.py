@@ -9,6 +9,7 @@ from flask import (current_app as app,
                    url_for,
                    )
 from flask_wtf.csrf import CSRFError
+from wtforms import SelectChoice
 
 from API_exploration.API import (xkcd as xkcd_api,  # Alias to avoid name clash with route.
                                  )
@@ -67,7 +68,8 @@ def xkcd():
 
     if request.method == 'POST':
         form.select_comic_number.choices = [  # Prep valid choices to validate dropdown options.
-            num for num in range(1, int(form.latest_comic_number.data) + 1)]
+            SelectChoice(value=num, label=str(num))
+            for num in range(1, int(form.latest_comic_number.data) + 1)]
         if form.validate_on_submit():
             if form.first.data:
                 requested_comic_number = 1
@@ -83,10 +85,12 @@ def xkcd():
     comic_data = xkcd_api.get_comic_data(comic_number=requested_comic_number,
                                          cache_hour=(current_date.date, current_date.hour))
     # Prepare form:
-    comic_choices = [num for num in range(1, comic_data['latest_comic_number'] + 1)]
-    comic_choices.remove(404)  # Remove nonexistent comic
-    form.select_comic_number.choices = comic_choices
-    form.select_comic_number.choices.remove(comic_data['comic_number'])  # Remove current comic
+    excluded_comics = {404,  # Nonexistent comic
+                       comic_data['comic_number']}  # Current comic
+    form.select_comic_number.choices = [
+        SelectChoice(value=num, label=str(num))
+        for num in range(1, comic_data['latest_comic_number'] + 1)
+        if num not in excluded_comics]
 
     form.current_comic.data = comic_data['comic_number']  # Set current comic
     form.latest_comic_number.data = comic_data['latest_comic_number']  # Set latest comic
